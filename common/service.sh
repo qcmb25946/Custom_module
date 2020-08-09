@@ -7,8 +7,10 @@ MODDIR=${0%/*}
 CAPOCAF="/system/bin/CAPOCAF.sh"
 PTC="/system/bin/CO_PTC.sh"
 CTC="/system/bin/CO_CTC.sh"
-log="/system/bin/log.sh"
+LOG="/system/bin/CO_LOG.sh"
+SOC="/system/bin/SOC_Certification.sh"
 rm -rf /data/TC
+rm -rf /sdcard/TC
 rm -rf /data/vendor/thermal
 nohup $CAPOCAF > /dev/null 2>&1 &
 sleep 5
@@ -16,5 +18,7 @@ nohup $PTC > /dev/null 2>&1 &
 sleep 1
 nohup $CTC > /dev/null 2>&1 &
 sleep 1
-nohup $log > /dev/null 2>&1 &
+nohup $LOG > /dev/null 2>&1 &
+sleep 1
+nohup $SOC > /dev/null 2>&1 &
 sleep 1

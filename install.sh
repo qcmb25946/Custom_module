@@ -45,7 +45,7 @@ LATESTARTSERVICE=true
 
 print_modname() {
   ui_print "************************************************ "
-  ui_print "全机型自定义温控v1.61 "
+  ui_print "全机型自定义温控v1.7 "
   ui_print "千城墨白                "
   ui_print "************************************************ "
 }
@@ -100,11 +100,12 @@ set_permissions() {
   
   # The following is default permissions, DO NOT remove
   set_perm_recursive  $MODPATH  0  0  0755  0644
-  set_perm  $MODPATH/system/bin/CO_CTC.sh  0  0  0755
-  set_perm  $MODPATH/system/bin/CO_PTC.sh  0  0  0755
-  set_perm  $MODPATH/system/bin/CAPOCAF.sh  0  0  0755
-  set_perm  $MODPATH/system/bin/log.sh  0  0  0755
-  set_perm  $MODPATH/sbin/TC/设置参数.sh  0  0  0755
+  set_perm  $MODPATH/system/bin/CO_CTC.sh  0  0  0555
+  set_perm  $MODPATH/system/bin/CO_PTC.sh  0  0  0555
+  set_perm  $MODPATH/system/bin/CAPOCAF.sh  0  0  0555
+  set_perm  $MODPATH/system/bin/CO_LOG.sh  0  0  0555
+  set_perm  $MODPATH/system/bin/SOC_Certification.sh  0  0  0555
+  set_perm  $MODPATH/storage/emulated/TC/script/CTC/COC.sh  0  0  0555
   #设置权限，基本不要去动
 }
 

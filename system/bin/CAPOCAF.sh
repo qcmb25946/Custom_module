@@ -1,5 +1,7 @@
 #!/system/bin/sh
-{
+
+#杂项，创建文件夹，检测"设置参数"文件是否被删除，跟新文件
+
 while true
 do
 sleep 1
@@ -26,6 +28,21 @@ thermal_engine=/system/vendor/bin/thermal-engine
             mkdir -p '/storage/emulated/TC/parameter/PTC'
         else
             echo "'/storage/emulated/TC/parameter/PTC'已存在"
+        fi
+        if [ ! -d '/storage/emulated/TC/script/CTC' ]; then
+            mkdir -p '/storage/emulated/TC/script/CTC'
+        else
+            echo "'/storage/emulated/TC/script/CTC'已存在"
+        fi
+        if [ ! -d '/storage/emulated/TC/script/PTC' ]; then
+            mkdir -p '/storage/emulated/TC/script/PTC'
+        else
+            echo "'/storage/emulated/TC/script/PTC'已存在"
+        fi
+        if [ ! -d '/storage/emulated/TC/script/LOG' ]; then
+            mkdir -p '/storage/emulated/TC/script/LOG'
+        else
+            echo "'/storage/emulated/TC/script/LOG'已存在"
         fi
 	    if [ ! -e $thermal_engine ]; then
 	        echo "温控已被移出继续运行"
@@ -58,9 +75,9 @@ thermal_engine=/system/vendor/bin/thermal-engine
                     echo "'设置参数.sh'文件已存在"
                     sh /storage/emulated/TC/设置参数.sh
                 fi
-                if [ ! -e '/storage/emulated/TC/13.txt' ]; then
-                    rm -rf /storage/emulated/TC/设置参数.sh /storage/emulated/TC/12.txt
-                    touch '/storage/emulated/TC/13.txt'
+                if [ ! -e '/storage/emulated/TC/14.txt' ]; then
+                    rm -rf /storage/emulated/TC/*
+                    touch '/storage/emulated/TC/14.txt'
                     echo '1'
                 else
                     echo "最新版本"
@@ -71,4 +88,3 @@ thermal_engine=/system/vendor/bin/thermal-engine
             fi
         fi
 done
-}

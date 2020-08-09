@@ -1,28 +1,28 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
-Delete_temperature_control=#sbin#.magisk#modules#Delete_temperature_control
-find /system/ -name '*thermal*' > /sbin/Delete_temperature_control
-find /system/vendor/ -name '*thermal*' >> /sbin/Delete_temperature_control
-grep -v "so" /sbin/Delete_temperature_control > /sbin/temperature_control
-grep -v "android" /sbin/temperature_control > /sbin/干温控.sh
-sed -i "s/^/mkdir -p $Delete_temperature_control/g" /sbin/干温控.sh
-sed -i "s/#/\//g" /sbin/干温控.sh
-sh /sbin/干温控.sh
-sed -i "s/mkdir -p/rm -rf/g" /sbin/干温控.sh
-sh /sbin/干温控.sh
-sed -i "s/rm -rf/touch/g" /sbin/干温控.sh
-sh /sbin/干温控.sh
-rm -rf /sbin/Delete_temperature_control
-rm -rf /sbin/干温控.sh
-find /sbin/.magisk/modules/Delete_temperature_control/ -name '*thermal*' > /sdcard/温控文件
+Delete_temperature_control=#data#adb#modules#Delete_temperature_control
+find /system/ -name '*thermal*' > /data/Delete_temperature_control
+find /system/vendor/ -name '*thermal*' >> /data/Delete_temperature_control
+echo "/system/vendor/etc/perf/perfboostsconfig.xml" >> /data/Delete_temperature_control
+grep -v '.so' /data/Delete_temperature_control > /data/temperature_control
+grep -v "android" /data/temperature_control > /data/干温控.sh
+sed -i "s/^/mkdir -p $Delete_temperature_control/g" /data/干温控.sh
+sed -i "s/#/\//g" /data/干温控.sh
+sh /data/干温控.sh
+sed -i "s/mkdir -p/rm -rf/g" /data/干温控.sh
+sh /data/干温控.sh
+sed -i "s/rm -rf/touch/g" /data/干温控.sh
+sh /data/干温控.sh
+rm -rf /data/Delete_temperature_control
+rm -rf /data/干温控.sh
 echo "id=Delete_temperature_control
-name=干掉全机型温控v1.31
-version=v2020.07.10
+name=干掉全机型温控v1.32
+version=v2020.07.12
 versionCode=8
 author=千城墨白
-description=干就完了" > /sbin/.magisk/modules/Delete_temperature_control/module.prop
+description=这是自定义温控模块的文件代码自定义生成的。根据不同机型去生成不同的空温控文件，来顶替原温控文件。删除改模块重启会还原温控，但自定义模块将不运行" > /data/adb/modules/Delete_temperature_control/module.prop
 #关闭核心温控
 echo "echo 0 > /sys/module/msm_thermal/core_control/enabled
 echo -n disable > /sys/devices/soc/soc:qcom,bcl/mode
 echo N > /sys/module/msm_thermal/parameters/enabled
-setenforce 0" > /sbin/.magisk/modules/Delete_temperature_control/service.sh
+setenforce 0" > /data/adb/modules/Delete_temperature_control/service.sh

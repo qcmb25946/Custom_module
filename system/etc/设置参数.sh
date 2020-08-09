@@ -1,30 +1,46 @@
+#请设置你的参数
+#当前模式(请填选：默认=A、重度=B)
+Current_mode=A
+#日常模式频率(CPU和GPU频率填前5位数、 请数清楚。注意不能填小数)
+#CPU小核心
+Daily_frequency_of_small_core=15000
+#CPU大核心
+Big_core_daily_frequency=20000
+#GPU
+Video_card_daily_frequency=40000
+
+
 #请设置温度阈值（参考传感器为gpu温度）
 #检测gpu温度时间（单位：秒）
 gpu_time=1
-#降频阈值（Limit_threshold=）（单位：℃）(填写注意小数点)
+#降频温度（单位：℃）(填写注意小数点)
 Limit_threshold=81.1
-#满血阈值（Open_threshold=）（单位：℃）(填写注意小数点)
+#满血温度（单位：℃）(填写注意小数点)
 Open_threshold=65.5
-#降频幅度(百分比降频，不要设置超过100，数字越小降幅越大) (禁止小数)
+#降频幅度(百分比降频，不要设置超过100，数字越小降幅越大)
+# (禁止小数)（计算过程 降频前最大频率\100X90=结果最近的一个频率）
+#CPU
 cpu_Frequency_reduction=90
+#GPU
 gpu_Frequency_reduction=90
+
+
 #请设置电池阈值（参考传感器为电池温度，高于45度会被官方限制，游戏手机除外）
-#增加电池电流最高温度阈值（Increase_current_threshold=）
-#（单位：℃）(填写注意小数点)
-Increase_current_threshold=43.1
-#降低电流阈值（Lower_current_threshold=)
-#（单位：℃）(填写注意小数点)
-Lower_current_threshold=40.1
-#当前设置最低电流（Minimum_current=）（单位：MA）(禁止小数)
+#降低充电速度的温度（单位：℃）(填写注意小数点)
+Increase_current_threshold=43.5
+#满血充电的最高温度（单位：℃）(填写注意小数点)
+Lower_current_threshold=41
+
+#当前设置最低电流档位（单位：MA）(禁止小数)
 # (不能高于最大电流X0.9，比如最大电流设置2000最低电流上限2000X0.9=1800即上限不能高于1800，否则脚本出错)
 Minimum_current=1500
-#当前设置最高电流（Maximum_current=）（单位：MA）(禁止小数)
+#当前设置最高电流档位（单位：MA）(禁止小数)
 # (不能低于最小电流/0.9，比如最小电流设置1800最高电流底线1800/0.9=2000即最底不能低于2000，否则脚本出错)
 Maximum_current=6000
-#降低电流大小（600=500MA）（Reduce_current_size=）
+#每次降低电流大小(单位：MA)
 #（单位：MA）(禁止小数)
 Reduce_current_size=800
-#检测电池温度时间（实际运行要加1-2秒）（单位：秒）
+#检测电池温度时间（单位：秒）
 charge_time=3
 #下面脚本请勿更改
 ##############################################################################################
@@ -187,6 +203,10 @@ charge_time=3
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################
+echo $Current_mode > /storage/emulated/TC/parameter/PTC/Current_mode
+echo $(($Daily_frequency_of_small_core*100)) > /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core
+echo $(($Big_core_daily_frequency*100)) > /storage/emulated/TC/parameter/PTC/Big_core_daily_frequency
+echo $(($Video_card_daily_frequency*10000)) > /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency
 echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /storage/emulated/TC/parameter/PTC/Limit_threshold
 echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /storage/emulated/TC/parameter/PTC/Open_threshold
 echo $gpu_time > /storage/emulated/TC/parameter/PTC/gpu_time
