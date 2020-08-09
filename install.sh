@@ -45,7 +45,7 @@ LATESTARTSERVICE=true
 
 print_modname() {
   ui_print "************************************************ "
-  ui_print "全机型自定义温控v1.53 "
+  ui_print "全机型自定义温控v1.6 "
   ui_print "千城墨白                "
   ui_print "************************************************ "
 }
@@ -100,8 +100,8 @@ set_permissions() {
   
   # The following is default permissions, DO NOT remove
   set_perm_recursive  $MODPATH  0  0  0755  0644
-  set_perm  $MODPATH/system/bin/CTC.sh  0  0  0755
-  set_perm  $MODPATH/system/bin/PTC.sh  0  0  0755
+  set_perm  $MODPATH/system/bin/CO_CTC.sh  0  0  0755
+  set_perm  $MODPATH/system/bin/CO_PTC.sh  0  0  0755
   set_perm  $MODPATH/system/bin/CAPOCAF.sh  0  0  0755
   set_perm  $MODPATH/system/bin/log.sh  0  0  0755
   set_perm  $MODPATH/sbin/TC/设置参数.sh  0  0  0755

@@ -12,20 +12,20 @@ gpu_Frequency_reduction=90
 #增加电池电流最高温度阈值（Increase_current_threshold=）
 #（单位：℃）(填写注意小数点)
 Increase_current_threshold=43.1
-#降低电流阈值（Lower_current_threshold=）
+#降低电流阈值（Lower_current_threshold=)
 #（单位：℃）(填写注意小数点)
-Lower_current_threshold=39.5
+Lower_current_threshold=39.6
 #当前设置最低电流（Minimum_current=）（单位：MA）(禁止小数)
 # (不能高于最大电流X0.9，比如最大电流设置2000最低电流上限2000X0.9=1800即上限不能高于1800，否则脚本出错)
 Minimum_current=1500
 #当前设置最高电流（Maximum_current=）（单位：MA）(禁止小数)
 # (不能低于最小电流/0.9，比如最小电流设置1800最高电流底线1800/0.9=2000即最底不能低于2000，否则脚本出错)
 Maximum_current=6000
-#降低电流大小（600=600MA）（Reduce_current_size=）
+#降低电流大小（600=500MA）（Reduce_current_size=）
 #（单位：MA）(禁止小数)
-Reduce_current_size=1000
+Reduce_current_size=500
 #检测电池温度时间（实际运行要加1-2秒）（单位：秒）
-charge_time=10
+charge_time=5
 #下面脚本请勿更改
 ##############################################################################################
 ##############################################################################################
@@ -187,24 +187,17 @@ charge_time=10
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################
-thermal_engine=/system/vendor/bin/thermal-engine
-thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
-if [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
-	echo "温控已被移出继续运行"
-    echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/PTC/Limit_threshold
-    echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /sdcard/TC/parameter/PTC/Open_threshold
-    echo $gpu_time > /sdcard/TC/parameter/PTC/gpu_time
-    echo $cpu_Frequency_reduction > /sdcard/TC/parameter/PTC/cpu_Frequency_reduction
-    echo $gpu_Frequency_reduction > /sdcard/TC/parameter/PTC/gpu_Frequency_reduction
-    echo "$Increase_current_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/CTC/Increase_current_threshold
-    echo "$Lower_current_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/CTC/Lower_current_threshold
-    echo $Reduce_current_size > /sdcard/TC/parameter/CTC/Reduce_current_size
-    echo $charge_time > /sdcard/TC/parameter/CTC/charge_time
-    echo $Minimum_current > /sdcard/TC/parameter/CTC/Minimum_current
-    echo $Maximum_current > /sdcard/TC/parameter/CTC/Maximum_current
-elif [ $thermal_engine_zf -gt 0 ]; then
-    echo "温控存在停止运行"
-fi
+echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/PTC/Limit_threshold
+echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /sbin/TC/parameter/PTC/Open_threshold
+echo $gpu_time > /sbin/TC/parameter/PTC/gpu_time
+echo $cpu_Frequency_reduction > /sbin/TC/parameter/PTC/cpu_Frequency_reduction
+echo $gpu_Frequency_reduction > /sbin/TC/parameter/PTC/gpu_Frequency_reduction
+echo "$Increase_current_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/CTC/Increase_current_threshold
+echo "$Lower_current_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/CTC/Lower_current_threshold
+echo $Reduce_current_size > /sbin/TC/parameter/CTC/Reduce_current_size
+echo $charge_time > /sbin/TC/parameter/CTC/charge_time
+echo $Minimum_current > /sbin/TC/parameter/CTC/Minimum_current
+echo $Maximum_current > /sbin/TC/parameter/CTC/Maximum_current
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################

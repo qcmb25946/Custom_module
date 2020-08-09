@@ -1,8 +1,10 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
 Delete_temperature_control=#sbin#.magisk#modules#Delete_temperature_control
-find /system/vendor/ -name '*thermal*' > /sbin/Delete_temperature_control
-grep -v "android" /sbin/Delete_temperature_control > /sbin/干温控.sh
+find /system/ -name '*thermal*' > /sbin/Delete_temperature_control
+find /system/vendor/ -name '*thermal*' >> /sbin/Delete_temperature_control
+grep -v "so" /sbin/Delete_temperature_control > /sbin/temperature_control
+grep -v "android" /sbin/temperature_control > /sbin/干温控.sh
 sed -i "s/^/mkdir -p $Delete_temperature_control/g" /sbin/干温控.sh
 sed -i "s/#/\//g" /sbin/干温控.sh
 sh /sbin/干温控.sh

@@ -5,8 +5,8 @@ MODDIR=${0%/*}
 
 # 该脚本将在设备开机后作为延迟服务启动
 CAPOCAF="/system/bin/CAPOCAF.sh"
-PTC="/system/bin/PTC.sh"
-CTC="/system/bin/CTC.sh"
+PTC="/system/bin/CO_PTC.sh"
+CTC="/system/bin/CO_CTC.sh"
 log="/system/bin/log.sh"
 rm -rf /data/TC
 rm -rf /data/vendor/thermal
