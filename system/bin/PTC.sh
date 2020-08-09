@@ -193,15 +193,15 @@ elif [ $thermal_engine_zf -gt 0 ]; then
 当前超大核最大频率=`cat $cpu7_max_freq_file_control`
 当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
-			echo "\t当前小核最大频率=`cat $cpu0_max_freq_file_control`
+			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu6_max_freq_file_control`
 当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
-			echo "\t当前小核最大频率=`cat $cpu0_max_freq_file_control`
+			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu4_max_freq_file_control`
 当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed ]; then
-			echo "\t当前小核最大频率=`cat $cpu0_max_freq_file_control`
+			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu2_max_freq_file_control`
 当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
 		fi

@@ -45,7 +45,7 @@ LATESTARTSERVICE=true
 
 print_modname() {
   ui_print "************************************************ "
-  ui_print "全新自定义温控v1.5 "
+  ui_print "全机型自定义温控v1.51 "
   ui_print "千城墨白                "
   ui_print "************************************************ "
 }
