@@ -75,9 +75,9 @@ thermal_engine=/system/vendor/bin/thermal-engine
                     echo "'设置参数.sh'文件已存在"
                     sh /storage/emulated/TC/设置参数.sh
                 fi
-                if [ ! -e '/storage/emulated/TC/14.txt' ]; then
+                if [ ! -e '/storage/emulated/TC/AA.txt' ]; then
                     rm -rf /storage/emulated/TC/*
-                    touch '/storage/emulated/TC/14.txt'
+                    touch '/storage/emulated/TC/AA.txt'
                     echo '1'
                 else
                     echo "最新版本"
