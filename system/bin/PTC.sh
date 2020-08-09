@@ -33,17 +33,17 @@ thermal_dir="/sys/class/thermal/thermal_zone10/temp"
 Judgments_based=`cat /sys/class/thermal/thermal_zone10/temp |wc -c`
 gpu_temp=`cat ${thermal_dir}`
 #读取固定最大gpu频率
-awk '{print $1}' $gpu_max_freq_file_fixed > /sbin/TC/parameter/PTC/gpu_max_freq
-gpu_max_freq_Read_fixed=`cat /sbin/TC/parameter/PTC/gpu_max_freq`
+awk '{print $1}' $gpu_max_freq_file_fixed > /sdcard/TC/parameter/PTC/gpu_max_freq
+gpu_max_freq_Read_fixed=`cat /sdcard/TC/parameter/PTC/gpu_max_freq`
 #读取控制gpu最大频率
 gpu_max_freq_Read_control=`cat $gpu_max_freq_file_control`
 gpu_max_freq_Read_control_three=`cat $gpu_max_freq_file_control_three`
 #读取设定参数
-cpu_Frequency_reduction=`cat /sbin/TC/parameter/PTC/cpu_Frequency_reduction`
-gpu_Frequency_reduction=`cat /sbin/TC/parameter/PTC/gpu_Frequency_reduction`
-Limit_threshold_dir=`cat /sbin/TC/parameter/PTC/Limit_threshold`
-Open_threshold_dir=`cat /sbin/TC/parameter/PTC/Open_threshold`
-gpu_time=`cat /sbin/TC/parameter/PTC/gpu_time`
+cpu_Frequency_reduction=`cat /sdcard/TC/parameter/PTC/cpu_Frequency_reduction`
+gpu_Frequency_reduction=`cat /sdcard/TC/parameter/PTC/gpu_Frequency_reduction`
+Limit_threshold_dir=`cat /sdcard/TC/parameter/PTC/Limit_threshold`
+Open_threshold_dir=`cat /sdcard/TC/parameter/PTC/Open_threshold`
+gpu_time=`cat /sdcard/TC/parameter/PTC/gpu_time`
 #识别处理器
 Identify=`getprop ro.board.platform`
 #某一个温控路径
@@ -118,7 +118,7 @@ if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 			chmod 444 $gpu_max_freq_file_control
 		fi
 		echo "温度过高,正在降频"
-		echo "温度过高,正在降频" > /sbin/TC/Result/PTC/soc_present.log
+		echo "温度过高,正在降频" > /sdcard/TC/Result/PTC/soc_present.log
     elif [ $gpu_temp -le $Open_threshold ]; then
 		if [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
 			cpu0_max_freq=`cat $cpu0_max_freq_file_fixed`
@@ -159,7 +159,7 @@ if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 			chmod 444 $gpu_max_freq_file_control
 		fi
 		echo "温度正常,当前已恢复满血"
-		echo "温度正常,当前已恢复满血" > /sbin/TC/Result/PTC/soc_present.log
+		echo "温度正常,当前已恢复满血" > /sdcard/TC/Result/PTC/soc_present.log
     fi
     #日志
     if [ Log ]; then
@@ -167,19 +167,19 @@ if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 			echo "当前设置小核最大频率=`cat $cpu0_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu6_max_freq_file_control`
 当前设置超大核最大频率=`cat $cpu7_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu0_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu6_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu0_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu4_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu0_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu2_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		fi
     fi
 elif [ $thermal_engine_zf -gt 0 ]; then
@@ -191,19 +191,19 @@ elif [ $thermal_engine_zf -gt 0 ]; then
 			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu6_max_freq_file_control`
 当前超大核最大频率=`cat $cpu7_max_freq_file_control`
-当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
 			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu6_max_freq_file_control`
-当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
 			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu4_max_freq_file_control`
-当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		elif [ -f $cpu3_max_freq_file_fixed ]; then
 			echo "当前小核最大频率=`cat $cpu0_max_freq_file_control`
 当前大核最大频率=`cat $cpu2_max_freq_file_control`
-当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /sdcard/TC/Result/PTC/soc_max_freq_Current
 		fi
     fi
 fi

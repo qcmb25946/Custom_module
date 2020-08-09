@@ -191,17 +191,17 @@ thermal_engine=/system/vendor/bin/thermal-engine
 thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
 if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 	echo "温控已被移出继续运行"
-    echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/PTC/Limit_threshold
-    echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /sbin/TC/parameter/PTC/Open_threshold
-    echo $gpu_time > /sbin/TC/parameter/PTC/gpu_time
-    echo $cpu_Frequency_reduction > /sbin/TC/parameter/PTC/cpu_Frequency_reduction
-    echo $gpu_Frequency_reduction > /sbin/TC/parameter/PTC/gpu_Frequency_reduction
-    echo "$Increase_current_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/CTC/Increase_current_threshold
-    echo "$Lower_current_threshold 10"|awk '{print ($1*$2)}' > /sbin/TC/parameter/CTC/Lower_current_threshold
-    echo $Reduce_current_size > /sbin/TC/parameter/CTC/Reduce_current_size
-    echo $charge_time > /sbin/TC/parameter/CTC/charge_time
-    echo $Minimum_current > /sbin/TC/parameter/CTC/Minimum_current
-    echo $Maximum_current > /sbin/TC/parameter/CTC/Maximum_current
+    echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/PTC/Limit_threshold
+    echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /sdcard/TC/parameter/PTC/Open_threshold
+    echo $gpu_time > /sdcard/TC/parameter/PTC/gpu_time
+    echo $cpu_Frequency_reduction > /sdcard/TC/parameter/PTC/cpu_Frequency_reduction
+    echo $gpu_Frequency_reduction > /sdcard/TC/parameter/PTC/gpu_Frequency_reduction
+    echo "$Increase_current_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/CTC/Increase_current_threshold
+    echo "$Lower_current_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/CTC/Lower_current_threshold
+    echo $Reduce_current_size > /sdcard/TC/parameter/CTC/Reduce_current_size
+    echo $charge_time > /sdcard/TC/parameter/CTC/charge_time
+    echo $Minimum_current > /sdcard/TC/parameter/CTC/Minimum_current
+    echo $Maximum_current > /sdcard/TC/parameter/CTC/Maximum_current
 elif [ $thermal_engine_zf -gt 0 ]; then
     echo "温控存在停止运行"
 fi
