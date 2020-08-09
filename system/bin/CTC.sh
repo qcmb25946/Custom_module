@@ -32,7 +32,7 @@ Increase_current_threshold=`echo $Increase_current_threshold_dir 1000000|awk '{p
 #检查温控
 thermal_engine="/system/vendor/bin/thermal-engine"
 thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
-	if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
+	if [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 	    echo "温控已被移出继续运行"
 	    if [ $Charge -ge 0 ]; then
 	        echo "没充电"

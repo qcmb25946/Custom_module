@@ -28,7 +28,7 @@ thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
         else
             echo "'/sdcard/TC/parameter/PTC'已存在"
         fi
-	    if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
+	    if [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 	        echo "温控已被移出继续运行"
             #复制文件
             if [ ! -f '/sdcard/TC/设置参数.sh' ]; then

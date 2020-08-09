@@ -72,7 +72,7 @@ do
             echo "执行完毕"
         fi
     #除去温控
-    elif [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
+    elif [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
         #减小满血温度阈值
         Open_threshold=`cat /sdcard/TC/parameter/PTC/Open_threshold`
         Limit_threshold=`cat /sdcard/TC/parameter/PTC/Limit_threshold`

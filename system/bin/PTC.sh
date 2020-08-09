@@ -50,7 +50,7 @@ Identify=`getprop ro.board.platform`
 thermal_engine=/system/vendor/bin/thermal-engine
 thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
 #检测温控
-if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
+if [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
     echo "温控已被移出继续运行"
     #读取温度
     if [ $Judgments_based -eq 4 -o $Judgments_based -eq 6 ]; then

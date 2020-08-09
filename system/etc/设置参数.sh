@@ -189,7 +189,7 @@ charge_time=10
 ##############################################################################################
 thermal_engine=/system/vendor/bin/thermal-engine
 thermal_engine_zf=`wc -m $thermal_engine | cut -c -1`
-if [ ! -f $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
+if [ ! -d $thermal_engine -o $thermal_engine_zf -eq 0 ]; then
 	echo "温控已被移出继续运行"
     echo "$Limit_threshold 10"|awk '{print ($1*$2)}' > /sdcard/TC/parameter/PTC/Limit_threshold
     echo "$Open_threshold 10"|awk '{print ($1*$2)}'  > /sdcard/TC/parameter/PTC/Open_threshold
