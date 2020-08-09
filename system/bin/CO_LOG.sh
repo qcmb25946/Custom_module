@@ -5,7 +5,7 @@
 while true
 do
 sleep 1
-thermal_engine="/system/vendor/bin/thermal-engine"
+thermal_engine=/system/vendor/etc/thermal-engine.conf
 if [ ! -e $thermal_engine ]; then
     echo "成功删除温控"
     if [ -e "/storage/emulated/TC/script/LOG/LOG_monitor_Unlock.sh" ]; then

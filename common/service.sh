@@ -11,7 +11,6 @@ LOG="/system/bin/CO_LOG.sh"
 SOC="/system/bin/SOC_Certification.sh"
 rm -rf /data/TC
 rm -rf /sdcard/TC
-rm -rf /data/vendor/thermal
 nohup $CAPOCAF > /dev/null 2>&1 &
 sleep 5
 nohup $PTC > /dev/null 2>&1 &

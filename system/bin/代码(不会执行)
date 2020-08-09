@@ -1,0 +1,7 @@
+#屏幕是否亮屏  true false
+dumpsys window policy | grep "mInputRestricted"
+#识别处理器
+getprop ro.board.platform
+#获取前台报名
+dumpsys window | grep "mCurrentFocus"|sed 's/{/ /g'|sed 's/}/ /g'|sed 's/\// /g'|awk '{print $4}'
+#查询温控文件

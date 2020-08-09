@@ -6,7 +6,7 @@ while true
 do
 sleep 1
 #温控文件
-thermal_engine="/system/vendor/bin/thermal-engine"
+thermal_engine=/system/vendor/etc/thermal-engine.conf
 if [ ! -e $thermal_engine ]; then
     echo "成功删除温控"
     if [ ! -e '/storage/emulated/TC/script/PTC/PTC_Transit.sh' ];then

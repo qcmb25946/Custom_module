@@ -7,7 +7,7 @@ do
 sleep 1
 #时间
 date
-thermal_engine=/system/vendor/bin/thermal-engine
+thermal_engine=/system/vendor/etc/thermal-engine.conf
         #创建文件夹
 	    if [ ! -d "/storage/emulated/TC/Result/CTC" ]; then
 	        mkdir -p "/storage/emulated/TC/Result/CTC"
