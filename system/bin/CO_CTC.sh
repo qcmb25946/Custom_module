@@ -3,7 +3,7 @@ while true
 do
 sleep 1
 thermal_engine="/system/vendor/bin/thermal-engine"
-if [ ! -f $thermal_engine ]; then
+if [ ! -e $thermal_engine ]; then
     echo "成功删除温控"
     sh /system/bin/CTC.sh
 else

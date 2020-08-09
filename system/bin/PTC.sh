@@ -30,17 +30,17 @@ thermal_dir="/sys/class/thermal/thermal_zone10/temp"
 Judgments_based=`cat /sys/class/thermal/thermal_zone10/temp |wc -c`
 gpu_temp=`cat ${thermal_dir}`
 #读取固定最大gpu频率
-awk '{print $1}' $gpu_max_freq_file_fixed > /sbin/TC/parameter/PTC/gpu_max_freq
-gpu_max_freq_Read_fixed=`cat /sbin/TC/parameter/PTC/gpu_max_freq`
+awk '{print $1}' $gpu_max_freq_file_fixed > /storage/emulated/TC/parameter/PTC/gpu_max_freq
+gpu_max_freq_Read_fixed=`cat /storage/emulated/TC/parameter/PTC/gpu_max_freq`
 #读取控制gpu最大频率
 gpu_max_freq_Read_control=`cat $gpu_max_freq_file_control`
 gpu_max_freq_Read_control_three=`cat $gpu_max_freq_file_control_three`
 #读取设定参数
-cpu_Frequency_reduction=`cat /sbin/TC/parameter/PTC/cpu_Frequency_reduction`
-gpu_Frequency_reduction=`cat /sbin/TC/parameter/PTC/gpu_Frequency_reduction`
-Limit_threshold_dir=`cat /sbin/TC/parameter/PTC/Limit_threshold`
-Open_threshold_dir=`cat /sbin/TC/parameter/PTC/Open_threshold`
-gpu_time=`cat /sbin/TC/parameter/PTC/gpu_time`
+cpu_Frequency_reduction=`cat /storage/emulated/TC/parameter/PTC/cpu_Frequency_reduction`
+gpu_Frequency_reduction=`cat /storage/emulated/TC/parameter/PTC/gpu_Frequency_reduction`
+Limit_threshold_dir=`cat /storage/emulated/TC/parameter/PTC/Limit_threshold`
+Open_threshold_dir=`cat /storage/emulated/TC/parameter/PTC/Open_threshold`
+gpu_time=`cat /storage/emulated/TC/parameter/PTC/gpu_time`
 #执行脚本间隔
 sleep $gpu_time
 #识别处理器
@@ -75,7 +75,7 @@ Identify=`getprop ro.board.platform`
 		    chmod 666 $cpu7_max_freq_file_control
 		    echo $cpu7_max_freq > $cpu7_max_freq_file_control
 		    chmod 444 $cpu7_max_freq_file_control
-    	elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
+    	elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed -a -e $cpu7_max_freq_file_fixed ]; then
     	    cpu0_max_freq_file_control_Read=`cat $cpu0_max_freq_file_control`
     	    cpu7_max_freq_file_control_Read=`cat $cpu7_max_freq_file_control`
 		    cpu0_max_freq_expr=`expr $cpu0_max_freq_file_control_Read / 100`
@@ -89,7 +89,7 @@ Identify=`getprop ro.board.platform`
 		    chmod 666 $cpu7_max_freq_file_control
 		    echo $cpu7_max_freq > $cpu7_max_freq_file_control
 		    chmod 444 $cpu7_max_freq_file_control
-	    elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
+	    elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed ]; then
 	        cpu0_max_freq_file_control_Read=`cat $cpu0_max_freq_file_control`
     	    cpu4_max_freq_file_control_Read=`cat $cpu4_max_freq_file_control`
 		    cpu0_max_freq_expr=`expr $cpu0_max_freq_file_control_Read / 100`
@@ -102,7 +102,7 @@ Identify=`getprop ro.board.platform`
 		    chmod 666 $cpu4_max_freq_file_control
 		    echo $cpu4_max_freq > $cpu4_max_freq_file_control
 		    chmod 444 $cpu4_max_freq_file_control
-		elif [ -f $cpu3_max_freq_file_fixed ]; then
+		elif [ -e $cpu3_max_freq_file_fixed ]; then
 			cpu0_max_freq_file_control_Read=`cat $cpu0_max_freq_file_control`
     	    cpu2_max_freq_file_control_Read=`cat $cpu2_max_freq_file_control`
 		    cpu0_max_freq_expr=`expr $cpu0_max_freq_file_control_Read / 100`
@@ -116,7 +116,7 @@ Identify=`getprop ro.board.platform`
 		    echo $cpu2_max_freq > $cpu2_max_freq_file_control
 		    chmod 444 $cpu2_max_freq_file_control
 		fi
-		if [ -f $gpu_max_freq_file_fixed ]; then
+		if [ -e $gpu_max_freq_file_fixed ]; then
 			gpu_max_freq_expr=`expr $gpu_max_freq_Read_control / 100`
 			gpu_max_freq=`expr $gpu_max_freq_expr \* $gpu_Frequency_reduction`
 			echo $gpu_max_freq
@@ -125,7 +125,7 @@ Identify=`getprop ro.board.platform`
 			chmod 444 $gpu_max_freq_file_control
 		fi
 		echo "温度过高,正在降频"
-		echo "温度过高,正在降频" > /sbin/TC/Result/PTC/soc_present.log
+		echo "温度过高,正在降频" > /storage/emulated/TC/Result/PTC/soc_present.log
     elif [ $gpu_temp -le $Open_threshold ]; then
 		if [ $Identify = lito -o $Identify = msmnile -o $Identify = kona ]; then
 			cpu0_max_freq=`cat $cpu0_max_freq_file_fixed`
@@ -140,7 +140,7 @@ Identify=`getprop ro.board.platform`
 			chmod 666 $cpu7_max_freq_file_control
 			echo $cpu7_max_freq > $cpu7_max_freq_file_control
 			chmod 444 $cpu7_max_freq_file_control
-		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
+		elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed -a -e $cpu7_max_freq_file_fixed ]; then
 			cpu0_max_freq=`cat $cpu0_max_freq_file_fixed`
 			cpu7_max_freq=`cat $cpu7_max_freq_file_fixed`
 			chmod 666 $cpu0_max_freq_file_control
@@ -149,7 +149,7 @@ Identify=`getprop ro.board.platform`
 			chmod 666 $cpu7_max_freq_file_control
 			echo $cpu7_max_freq > $cpu7_max_freq_file_control
 			chmod 444 $cpu7_max_freq_file_control
-		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
+		elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed ]; then
 			cpu0_max_freq=`cat $cpu0_max_freq_file_fixed`
 			cpu4_max_freq=`cat $cpu4_max_freq_file_fixed`
 			chmod 666 $cpu0_max_freq_file_control
@@ -158,7 +158,7 @@ Identify=`getprop ro.board.platform`
 			chmod 666 $cpu4_max_freq_file_control
 			echo $cpu4_max_freq > $cpu4_max_freq_file_control
 			chmod 444 $cpu4_max_freq_file_control
-		elif [ -f $cpu3_max_freq_file_fixed ]; then
+		elif [ -e $cpu3_max_freq_file_fixed ]; then
 			cpu0_max_freq=`cat $cpu0_max_freq_file_fixed`
 			cpu2_max_freq=`cat $cpu2_max_freq_file_fixed`
 			chmod 666 $cpu0_max_freq_file_control
@@ -168,7 +168,7 @@ Identify=`getprop ro.board.platform`
 			echo $cpu2_max_freq > $cpu2_max_freq_file_control
 			chmod 444 $cpu2_max_freq_file_control
 		fi
-		if [ -f $gpu_max_freq_file_fixed ]; then
+		if [ -e $gpu_max_freq_file_fixed ]; then
 		    echo $gpu_max_freq_Read_fixed
 		    cat $gpu_max_freq_file_control
 			chmod 666 $gpu_max_freq_file_control
@@ -176,7 +176,7 @@ Identify=`getprop ro.board.platform`
 			chmod 444 $gpu_max_freq_file_control
 		fi
 		echo "温度正常,当前已恢复满血"
-		echo "温度正常,当前已恢复满血" > /sbin/TC/Result/PTC/soc_present.log
+		echo "温度正常,当前已恢复满血" > /storage/emulated/TC/Result/PTC/soc_present.log
     fi
     #日志
     if [ Log ]; then
@@ -184,18 +184,18 @@ Identify=`getprop ro.board.platform`
 			echo "当前设置小核最大频率=`cat $cpu1_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu6_max_freq_file_control`
 当前设置超大核最大频率=`cat $cpu7_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
-		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed -a -f $cpu7_max_freq_file_fixed ]; then
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /storage/emulated/TC/Result/PTC/soc_max_freq_Current
+		elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed -a -e $cpu7_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu1_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu7_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
-		elif [ -f $cpu3_max_freq_file_fixed -a -f $cpu5_max_freq_file_fixed ]; then
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /storage/emulated/TC/Result/PTC/soc_max_freq_Current
+		elif [ -e $cpu3_max_freq_file_fixed -a -e $cpu5_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu2_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu3_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
-		elif [ -f $cpu3_max_freq_file_fixed ]; then
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /storage/emulated/TC/Result/PTC/soc_max_freq_Current
+		elif [ -e $cpu3_max_freq_file_fixed ]; then
 			echo "当前设置小核最大频率=`cat $cpu1_max_freq_file_control`
 当前设置大核最大频率=`cat $cpu3_max_freq_file_control`
-当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /sbin/TC/Result/PTC/soc_max_freq_Current
+当前设置GPU最大频率=`cat $gpu_max_freq_file_control`" > /storage/emulated/TC/Result/PTC/soc_max_freq_Current
 		fi
     fi
