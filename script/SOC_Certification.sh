@@ -4,7 +4,7 @@
 
 while true
 do
-sleep 10
+sleep 3
 cpu0_max_freq_file_fixed="/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"
 cpu1_max_freq_file_fixed="/sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_max_freq"
 cpu2_max_freq_file_fixed="/sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_max_freq"
@@ -58,10 +58,17 @@ elif [ $Identify = 'sm6150' -a `cat $cpu7_max_freq_file_fixed` -gt 2100000 ];the
     result=骁龙730G
 elif [ $Identify = 'sm6150' -a `cat $cpu7_max_freq_file_fixed` -it 2100000 ];then
     result=骁龙675
-#骁龙71X
+#骁龙73x
+elif [ $Identify = 'SM7150-AA' ];then
+    result=骁龙730
+elif [ $Identify = 'SM7150-AB' ];then
+    result=骁龙730G
+#骁龙71x
 elif [ $Identify = 'sdm710' ];then
     result=骁龙710
-#骁龙660
+#骁龙66x
+elif [ $Identify = 'trinket' ];then
+    result=骁龙665
 elif [ $Identify = 'sm660' `cat $cpu7_max_freq_file_fixed -gt 2000000 ];then
     result=骁龙660
 elif [ $Identify = 'sm660' `cat $cpu7_max_freq_file_fixed -lt 2000000 ];then
@@ -71,6 +78,10 @@ elif [ $Identify = 'msm8976' ];then
     result=骁龙652
 elif [ $Identify = 'msm8956' ];then
     result=骁龙650
+elif [ $Identify = 'msm8952' -a `cat $cpu7_max_freq_file_fixed` -gt 1799000 ];then
+    result=骁龙652
+elif [ $Identify = 'msm8952' -a `cat $cpu7_max_freq_file_fixed` -lt 1799000 ];then
+    result=骁龙617
 #骁龙636
 elif [ $Identify = 'sm636' ];then
     result=骁龙636
@@ -80,7 +91,12 @@ elif [ $Identify = 'msm8953pro' ];then
 elif [ $Identify = 'msm8953' ];then
     result=骁龙625
 else
-    result=未知(联系群主添加代码)
+    result="未知(联系群主添加代码)"
 fi
-echo $result > /storage/emulated/TC/Result/SOC
+
+if [ `cat /storage/emulated/TC/Result/SOC` = $result ];then
+    echo "ok"
+else
+    echo $result > /storage/emulated/TC/Result/SOC
+fi
 done

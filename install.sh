@@ -44,10 +44,13 @@ LATESTARTSERVICE=true
 # 在安装模块时显示什么内容
 
 print_modname() {
-  ui_print "************************************************ "
-  ui_print "全机型自定义温控v1.746 "
-  ui_print "千城墨白                "
-  ui_print "************************************************ "
+  echo  "************************************************"
+  sleep 0.1
+  echo  "欢迎使用自定义温控v2.0"
+  sleep 0.1
+  echo  "作者：千城墨白"
+  sleep 0.1
+  echo  "原作者：酷安@430穿梭機"
 }
 
 ##########################################################################################
@@ -80,9 +83,36 @@ REPLACE="
 ##########################################################################################
 # 释放文件，普通shell命令
 on_install() {
-  ui_print "- Repacking Files"
+  sleep 0.1
+  echo  "正在移出温控 "
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
- }
+  sleep 0.1
+  echo  "移出完成 "
+  sleep 0.1
+  echo  "正在搬运文件 "
+  unzip -o "$ZIPFILE" 'file/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成16% "
+  unzip -o "$ZIPFILE" 'Transit/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成33% "
+  unzip -o "$ZIPFILE" 'other/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成50% "
+  unzip -o "$ZIPFILE" 'switch/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成66% "
+  unzip -o "$ZIPFILE" 'parameter/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成83% "
+  unzip -o "$ZIPFILE" 'script/*' -d $MODPATH >&2
+  sleep 0.1
+  echo  "已完成100% "
+  sleep 0.1
+  echo  "文件搬运完成 "
+  sleep 0.1
+  echo  "************************************************ "
+}
 # 这里的意思是将模块里的/system整个内容覆盖到手机内的/system
 set_permissions() {
   # Only some special files require specific permissions
@@ -100,12 +130,6 @@ set_permissions() {
   
   # The following is default permissions, DO NOT remove
   set_perm_recursive  $MODPATH  0  0  0755  0644
-  set_perm  $MODPATH/system/bin/CO_CTC.sh  0  0  0555
-  set_perm  $MODPATH/system/bin/CO_PTC.sh  0  0  0555
-  set_perm  $MODPATH/system/bin/CAPOCAF.sh  0  0  0555
-  set_perm  $MODPATH/system/bin/CO_LOG.sh  0  0  0555
-  set_perm  $MODPATH/system/bin/SOC_Certification.sh  0  0  0555
-  set_perm  $MODPATH/storage/emulated/TC/script/CTC/COC.sh  0  0  0555
   #设置权限，基本不要去动
 }
 
