@@ -8,6 +8,8 @@ if [ `getprop ro.product.brand` = 'asus' ];then
 cat /data/Delete_temperature_control|grep -v '@'|grep -v '.jar'|grep -v '.odex'|grep -v '.vdex'|sort -u|grep -v 'thermalservice'|grep -v '.so' > /data/干温控.sh
 elif [ `getprop ro.product.brand` = 'lge' ];then
 cat /data/Delete_temperature_control|grep -v '@'|grep -v '.jar'|grep -v '.odex'|grep -v '.vdex'|sort -u|grep -v 'thermalservice'|grep -v "/vendor/bin/thermal-engine" > /data/干温控.sh
+elif [ `getprop ro.product.brand` = 'Coolpad' ];then
+cat /data/Delete_temperature_control|grep -v '@'|grep -v '.jar'|grep -v '.odex'|grep -v '.vdex'|sort -u|grep -v 'thermalservice'|grep -v "client"|grep -v "ioctl" > /data/干温控.sh
 else
 cat /data/Delete_temperature_control|grep -v '@'|grep -v '.jar'|grep -v '.odex'|grep -v '.vdex'|sort -u|grep -v 'thermalservice' > /data/干温控.sh
 fi

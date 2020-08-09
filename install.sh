@@ -46,7 +46,7 @@ LATESTARTSERVICE=true
 print_modname() {
   echo  "************************************************"
   sleep 0.1
-  echo  "欢迎使用自定义温控v2.0"
+  echo  "欢迎使用自定义温控v2.003"
   sleep 0.1
   echo  "作者：千城墨白"
   sleep 0.1
