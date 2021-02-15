@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 #SOC均衡模式脚本
 
 #时间
@@ -103,7 +101,6 @@ Identify=`getprop ro.board.platform`
 			    cpu6_Operation=2
 			fi
 			cpu6_max_freq=`cat $cpu6_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu6_Operation`
-			echo $cpu6_max_freq
 		fi
 #1+n+n/2+6/4+4架构cpu7
         if [ -e $cpu7_max_freq_file_control ]; then
@@ -124,7 +121,7 @@ Identify=`getprop ro.board.platform`
 #2+4架构cpu5
 		elif [ -e $cpu5_max_freq_file_control ]; then
 			cpu5_digital=`cat $cpu5_Frequency_table|wc -w`
- 			cpu5_Frequency_reduction=`cat $big_cpu_Frequency_reduction`
+ 			cpu5_Frequency_reduction=`cat $super_cpu_Frequency_reduction`
 			cpu5_max_freq_file_control_Read=`cat $cpu5_max_freq_file_control`
 			cpu5_Frequency_arrangement=`cat $cpu5_Frequency_table|sed "s/ /\n/g"| grep -n "$cpu5_max_freq_file_control_Read"|grep -v "^$"|cut -d: -f1`
 			if [ $cpu5_Frequency_reduction -lt 1 ];then
@@ -141,7 +138,7 @@ Identify=`getprop ro.board.platform`
 #2+2架构cpu3
 		elif [ -e $cpu3_max_freq_file_control ]; then
 			cpu3_digital=`cat $cpu3_Frequency_table|wc -w`
- 			cpu3_Frequency_reduction=`cat $big_cpu_Frequency_reduction`
+ 			cpu3_Frequency_reduction=`cat $super_cpu_Frequency_reduction`
 			cpu3_max_freq_file_control_Read=`cat $cpu3_max_freq_file_control`
 			cpu3_Frequency_arrangement=`cat $cpu3_Frequency_table|sed "s/ /\n/g"| grep -n "$cpu3_max_freq_file_control_Read"|grep -v "^$"|cut -d: -f1`
 			if [ $cpu3_Frequency_reduction -lt 1 ];then
@@ -161,7 +158,6 @@ Identify=`getprop ro.board.platform`
  			gpu_Frequency_reduction=`cat $gpu_Frequency_reduction`
 			gpu_max_freq_file_control_Read=`cat $gpu_max_freq_file_control`
 			gpu_Frequency_arrangement=`cat $gpu_max_freq_file_fixed|sed "s/ /\n/g"| grep -n "$gpu_max_freq_file_control_Read"|grep -v "^$"|cut -d: -f1`
-			echo $gpu_Frequency_arrangement
 			if [ $gpu_Frequency_reduction -lt 1 ];then
 				gpu_Frequency_reduction=1
 			elif [ $gpu_Frequency_reduction -gt 3 ];then
@@ -185,8 +181,6 @@ Identify=`getprop ro.board.platform`
 			cpu0_Different_frequencies=`cat $cpu0_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu0_Different_frequencies -lt $Daily_frequency_of_small_core ];then
 				cpu0_max_freq=$cpu0_Different_frequencies
-			else
-				throw_away=$cpu0_Different_frequencies
 			fi
 			done
 		fi
@@ -198,8 +192,6 @@ Identify=`getprop ro.board.platform`
 			cpu6_Different_frequencies=`cat $cpu6_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu6_Different_frequencies -lt $Big_core_daily_frequency ];then
 				cpu6_max_freq=$cpu6_Different_frequencies
-			else
-				throw_away=$cpu6_Different_frequencies
 			fi
 			done
 		fi
@@ -211,8 +203,6 @@ Identify=`getprop ro.board.platform`
 			cpu7_Different_frequencies=`cat $cpu7_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu7_Different_frequencies -lt $super_core_daily_frequency ];then
 				cpu7_max_freq=$cpu7_Different_frequencies
-			else
-				throw_away=$cpu7_Different_frequencies
 			fi
 			done
 #2+4架构cpu5
@@ -221,10 +211,8 @@ Identify=`getprop ro.board.platform`
 			for cpu0 in $(seq $cpu5_digital)
 			do
 			cpu5_Different_frequencies=`cat $cpu5_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
-			if [ $cpu5_Different_frequencies -lt $Big_core_daily_frequency ];then
+			if [ $cpu5_Different_frequencies -lt $super_core_daily_frequency ];then
 				cpu5_max_freq=$cpu5_Different_frequencies
-			else
-				throw_away=$cpu5_Different_frequencies
 			fi
 			done
 #2+2架构cpu3
@@ -233,10 +221,8 @@ Identify=`getprop ro.board.platform`
 			for cpu0 in $(seq $cpu3_digital)
 			do
 			cpu3_Different_frequencies=`cat $cpu3_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
-			if [ $cpu3_Different_frequencies -lt $Big_core_daily_frequency ];then
+			if [ $cpu3_Different_frequencies -lt $super_core_daily_frequency ];then
 				cpu3_max_freq=$cpu3_Different_frequencies
-			else
-				throw_away=$cpu3_Different_frequencies
 			fi
 			done
 		fi
@@ -249,8 +235,6 @@ Identify=`getprop ro.board.platform`
 			gpu_Different_frequencies=`cat $gpu_max_freq_file_fixed|sed "s/ /:/g"|cut -d: -f$gpu`
 			if [ $gpu_Different_frequencies -le $Video_card_daily_frequency ]; then
 				gpu_max_freq=$gpu_Different_frequencies
-			else
-				throw_away=$gpu_Different_frequencies
 			fi
 			done
 		fi
@@ -258,30 +242,54 @@ Identify=`getprop ro.board.platform`
 		echo "温度正常,当前已恢复满血" > /storage/emulated/TC/Result/PTC/soc_present.log
 	fi
     if [ $mode -eq 1 ];then
-        chmod 666 $cpu_max_freq
 	    if [ -e $cpu7_max_freq_file_fixed ]; then
 	        if [ $(cat /sys/devices/system/cpu/cpu0/cpufreq/affected_cpus|awk '{print $NF}') -eq 5 ];then
 	            if [ $(cat /sys/devices/system/cpu/cpu6/cpufreq/affected_cpus|awk '{print $NF}') -eq 6 ];then
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu6_max_freq_file_control` -ne $cpu6_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+	                    chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        else
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        fi
 		    else
 		        if [ $(cat /sys/devices/system/cpu/cpu4/cpufreq/affected_cpus|awk '{print $NF}') -eq 6 ];then
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu6_max_freq 5:$cpu6_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu6_max_freq_file_control` -ne $cpu6_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu6_max_freq 5:$cpu6_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        else
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu7_max_freq 5:$cpu7_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu7_max_freq 5:$cpu7_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        fi
 		    fi
 	    elif [ -e $cpu5_max_freq_file_fixed ]; then
-		    echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu5_max_freq 5:$cpu5_max_freq" > $cpu_max_freq
+	        if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu5_max_freq_file_control` -ne $cpu5_max_freq ];then
+	            chmod 666 $cpu_max_freq
+		        echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu5_max_freq 5:$cpu5_max_freq" > $cpu_max_freq
+		        chmod 444 $cpu_max_freq
+		    fi
 	    elif [ -e $cpu3_max_freq_file_fixed ]; then
-		    echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu3_max_freq 3:$cpu3_max_freq" > $cpu_max_freq
+	        if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu3_max_freq_file_control` -ne $cpu3_max_freq ];then
+	            chmod 666 $cpu_max_freq
+		        echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu3_max_freq 3:$cpu3_max_freq" > $cpu_max_freq
+		        chmod 444 $cpu_max_freq
+		    fi
 	    fi
-    	chmod 444 $cpu_max_freq
-    	chmod 666 $gpu_max_freq_file_control
-		echo $gpu_max_freq > $gpu_max_freq_file_control
-		chmod 444 $gpu_max_freq_file_control
+	    if [ ! `cat $gpu_max_freq_file_control` -eq "$gpu_max_freq" ];then
+    	    chmod 666 $gpu_max_freq_file_control
+		    echo $gpu_max_freq > $gpu_max_freq_file_control
+		    chmod 444 $gpu_max_freq_file_control
+		fi
     fi
 #日志
 	if [ Log ]; then
@@ -303,5 +311,6 @@ Identify=`getprop ro.board.platform`
 当前大核最大频率=`cat $cpu3_max_freq_file_control`
 当前GPU最大频率=`cat $gpu_max_freq_file_control`" > /storage/emulated/TC/Result/PTC/soc_max_freq_Current
 		fi
+		echo "均衡模式"
 		echo "均衡模式" > /storage/emulated/TC/Result/PTC/mode
 	fi

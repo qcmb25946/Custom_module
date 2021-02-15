@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 #保护模式
 
 
@@ -65,8 +63,6 @@ am kill-all
 			cpu0_Different_frequencies=`cat $cpu0_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu0_Different_frequencies -lt $Small_core_restrictions ];then
 				cpu0_max_freq=$cpu0_Different_frequencies
-			else
-				throw_away=$cpu0_Different_frequencies
 			fi
 			done
 		fi
@@ -78,8 +74,6 @@ am kill-all
 			cpu6_Different_frequencies=`cat $cpu6_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu6_Different_frequencies -lt $Big_core_limitation ];then
 				cpu6_max_freq=$cpu6_Different_frequencies
-			else
-				throw_away=$cpu6_Different_frequencies
 			fi
 			done
 		fi
@@ -91,8 +85,6 @@ am kill-all
 			cpu7_Different_frequencies=`cat $cpu7_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
 			if [ $cpu7_Different_frequencies -lt $Super_core_limit ];then
 				cpu7_max_freq=$cpu7_Different_frequencies
-			else
-				throw_away=$cpu7_Different_frequencies
 			fi
 			done
 #2+4架构cpu5
@@ -101,10 +93,8 @@ am kill-all
 			for cpu0 in $(seq $cpu5_digital)
 			do
 			cpu5_Different_frequencies=`cat $cpu5_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
-			if [ $cpu5_Different_frequencies -lt $Big_core_limitation ];then
+			if [ $cpu5_Different_frequencies -lt $Super_core_limit ];then
 				cpu5_max_freq=$cpu5_Different_frequencies
-			else
-				throw_away=$cpu5_Different_frequencies
 			fi
 			done
 #2+2架构cpu3
@@ -113,10 +103,8 @@ am kill-all
 			for cpu0 in $(seq $cpu3_digital)
 			do
 			cpu3_Different_frequencies=`cat $cpu3_Frequency_table|sed "s/ /:/g"|cut -d: -f$cpu0`
-			if [ $cpu3_Different_frequencies -lt $Big_core_limitation ];then
+			if [ $cpu3_Different_frequencies -lt $Super_core_limit ];then
 				cpu3_max_freq=$cpu3_Different_frequencies
-			else
-				throw_away=$cpu3_Different_frequencies
 			fi
 			done
 		fi
@@ -127,30 +115,54 @@ am kill-all
 		echo "当前电池温度过高，为了保护手机；启用保护模式"
 		echo "当前电池温度过高，为了保护手机；启用保护模式" > /storage/emulated/TC/Result/PTC/soc_present.log
 #写入总闸
-        chmod 666 $cpu_max_freq
 	    if [ -e $cpu7_max_freq_file_fixed ]; then
 	        if [ $(cat /sys/devices/system/cpu/cpu0/cpufreq/affected_cpus|awk '{print $NF}') -eq 5 ];then
 	            if [ $(cat /sys/devices/system/cpu/cpu6/cpufreq/affected_cpus|awk '{print $NF}') -eq 6 ];then
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu6_max_freq_file_control` -ne $cpu6_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+	                    chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        else
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu0_max_freq 5:$cpu0_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        fi
 		    else
 		        if [ $(cat /sys/devices/system/cpu/cpu4/cpufreq/affected_cpus|awk '{print $NF}') -eq 6 ];then
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu6_max_freq 5:$cpu6_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu6_max_freq_file_control` -ne $cpu6_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu6_max_freq 5:$cpu6_max_freq 6:$cpu6_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        else
-		            echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu7_max_freq 5:$cpu7_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+	                if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu7_max_freq_file_control` -ne $cpu7_max_freq ];then
+		                chmod 666 $cpu_max_freq
+		                echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu7_max_freq 5:$cpu7_max_freq 6:$cpu7_max_freq 7:$cpu7_max_freq" > $cpu_max_freq
+		                chmod 444 $cpu_max_freq
+		            fi
 		        fi
 		    fi
 	    elif [ -e $cpu5_max_freq_file_fixed ]; then
-		    echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu5_max_freq 5:$cpu5_max_freq" > $cpu_max_freq
+	        if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu5_max_freq_file_control` -ne $cpu5_max_freq ];then
+	            chmod 666 $cpu_max_freq
+		        echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu0_max_freq 3:$cpu0_max_freq 4:$cpu5_max_freq 5:$cpu5_max_freq" > $cpu_max_freq
+		        chmod 444 $cpu_max_freq
+		    fi
 	    elif [ -e $cpu3_max_freq_file_fixed ]; then
-		    echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu3_max_freq 3:$cpu3_max_freq" > $cpu_max_freq
+	        if [ `cat $cpu0_max_freq_file_control` -ne $cpu0_max_freq -o `cat $cpu3_max_freq_file_control` -ne $cpu3_max_freq ];then
+	            chmod 666 $cpu_max_freq
+		        echo "0:$cpu0_max_freq 1:$cpu0_max_freq 2:$cpu3_max_freq 3:$cpu3_max_freq" > $cpu_max_freq
+		        chmod 444 $cpu_max_freq
+		    fi
 	    fi
-    	chmod 444 $cpu_max_freq
-    	chmod 666 $gpu_max_freq_file_control
-		echo $gpu_max_freq > $gpu_max_freq_file_control
-		chmod 444 $gpu_max_freq_file_control
+	    if [ ! `cat $gpu_max_freq_file_control` -eq "$gpu_max_freq" ];then
+    	    chmod 666 $gpu_max_freq_file_control
+		    echo $gpu_max_freq > $gpu_max_freq_file_control
+		    chmod 444 $gpu_max_freq_file_control
+		fi
 #日志
 		if [ $Identify = lito -o $Identify = msmnile -o $Identify = kona ]; then
 			echo "当前小核最大频率=`cat $cpu1_max_freq_file_control`

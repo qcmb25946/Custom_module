@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 #识别处理器
 
 while true
@@ -42,10 +40,6 @@ elif [ $Identify = 'msm8996' -a `cat $cpu3_max_freq_file_fixed` -lt 1900000 ];th
     result=骁龙820节能版
 elif [ $Identify = 'msm8996' -a `cat $cpu3_max_freq_file_fixed` -gt 2200000 ];then
     result=骁龙821
-elif [ $Identify = 'msm8996pro' ];then
-    result=骁龙821
-elif [ $Identify = 'msm8996pro' -a `cat $cpu3_max_freq_file_fixed` -lt 2200000 ];then
-    result=骁龙821节能版
 #骁龙76X
 elif [ $Identify = 'lito' -a `cat $cpu7_max_freq_file_fixed` -gt 2700000 ];then
     result=骁龙768G
@@ -55,14 +49,9 @@ elif [ $Identify = 'lito' -a `cat $cpu7_max_freq_file_fixed` -lt 2399999 ];then
     result=骁龙765
 #骁龙730G与骁龙675
 elif [ $Identify = 'sm6150' -a `cat $cpu7_max_freq_file_fixed` -gt 2100000 ];then
-    result=骁龙730G
+    result=骁龙730系
 elif [ $Identify = 'sm6150' -a `cat $cpu7_max_freq_file_fixed` -it 2100000 ];then
     result=骁龙675
-#骁龙73x
-elif [ $Identify = 'SM7150-AA' ];then
-    result=骁龙730
-elif [ $Identify = 'SM7150-AB' ];then
-    result=骁龙730G
 #骁龙71x
 elif [ $Identify = 'sdm710' ];then
     result=骁龙710
@@ -74,14 +63,10 @@ elif [ $Identify = 'sm660' `cat $cpu7_max_freq_file_fixed -gt 2000000 ];then
 elif [ $Identify = 'sm660' `cat $cpu7_max_freq_file_fixed -lt 2000000 ];then
     result=骁龙660节能版
 #骁龙65X
-elif [ $Identify = 'msm8976' ];then
+elif [ $Identify = 'msm8952' -a -f $cpu7_max_freq_file_fixed ];then
     result=骁龙652
-elif [ $Identify = 'msm8956' ];then
+elif [ $Identify = 'msm8952' -a ! -f $cpu7_max_freq_file_fixed ];then
     result=骁龙650
-elif [ $Identify = 'msm8952' -a `cat $cpu7_max_freq_file_fixed` -gt 1799000 ];then
-    result=骁龙652
-elif [ $Identify = 'msm8952' -a `cat $cpu7_max_freq_file_fixed` -lt 1799000 ];then
-    result=骁龙617
 #骁龙636
 elif [ $Identify = 'sm636' ];then
     result=骁龙636
@@ -94,8 +79,12 @@ else
     result="未知(联系群主添加代码)"
 fi
 
-if [ `cat /storage/emulated/TC/Result/SOC` = $result ];then
-    echo "ok"
+if [ -f "/storage/emulated/TC/Result/SOC" ];then
+    if [ `cat /storage/emulated/TC/Result/SOC` = $result ];then
+        echo "ok"
+    else
+        echo $result > /storage/emulated/TC/Result/SOC
+    fi
 else
     echo $result > /storage/emulated/TC/Result/SOC
 fi

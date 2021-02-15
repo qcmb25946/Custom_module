@@ -44,13 +44,13 @@ LATESTARTSERVICE=true
 # 在安装模块时显示什么内容
 
 print_modname() {
-  echo  "************************************************"
+  echo  "************************************************ "
   sleep 0.1
-  echo  "欢迎使用自定义温控v2.003"
+  echo  "欢迎使用自定义温控 "
   sleep 0.1
-  echo  "作者：千城墨白"
+  echo  "作者：千城墨白 "
   sleep 0.1
-  echo  "原作者：酷安@430穿梭機"
+  echo  "原作者：酷安@430穿梭機 "
 }
 
 ##########################################################################################
@@ -89,25 +89,23 @@ on_install() {
   sleep 0.1
   echo  "移出完成 "
   sleep 0.1
-  echo  "正在搬运文件 "
+  echo  "正在搬运file "
   unzip -o "$ZIPFILE" 'file/*' -d $MODPATH >&2
   sleep 0.1
-  echo  "已完成16% "
+  echo  "正在搬运Transit "
   unzip -o "$ZIPFILE" 'Transit/*' -d $MODPATH >&2
   sleep 0.1
-  echo  "已完成33% "
+  echo  "正在搬运other "
   unzip -o "$ZIPFILE" 'other/*' -d $MODPATH >&2
   sleep 0.1
-  echo  "已完成50% "
+  echo  "正在搬运switch "
   unzip -o "$ZIPFILE" 'switch/*' -d $MODPATH >&2
   sleep 0.1
-  echo  "已完成66% "
+  echo  "正在搬运parameter "
   unzip -o "$ZIPFILE" 'parameter/*' -d $MODPATH >&2
   sleep 0.1
-  echo  "已完成83% "
+  echo  "正在搬运script "
   unzip -o "$ZIPFILE" 'script/*' -d $MODPATH >&2
-  sleep 0.1
-  echo  "已完成100% "
   sleep 0.1
   echo  "文件搬运完成 "
   sleep 0.1

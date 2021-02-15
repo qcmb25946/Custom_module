@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 #参数
 
 #路径
@@ -13,34 +11,6 @@ Identify_models=`getprop ro.product.device`
 #cpu固定最大频率
 cpu3_max_freq_file_fixed="/sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_max_freq"
 cpu7_max_freq_file_fixed="/sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_max_freq"
-#CPU频率表
-cpu0_Frequency_table=/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
-cpu1_Frequency_table=/sys/devices/system/cpu/cpu1/cpufreq/scaling_available_frequencies
-cpu2_Frequency_table=/sys/devices/system/cpu/cpu2/cpufreq/scaling_available_frequencies
-cpu3_Frequency_table=/sys/devices/system/cpu/cpu3/cpufreq/scaling_available_frequencies
-cpu4_Frequency_table=/sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies
-cpu5_Frequency_table=/sys/devices/system/cpu/cpu5/cpufreq/scaling_available_frequencies
-cpu6_Frequency_table=/sys/devices/system/cpu/cpu6/cpufreq/scaling_available_frequencies
-cpu7_Frequency_table=/sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
-#控制cpu最大频率路径
-cpu0_max_freq_file_control="/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"
-cpu1_max_freq_file_control="/sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq"
-cpu2_max_freq_file_control="/sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq"
-cpu3_max_freq_file_control="/sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq"
-cpu4_max_freq_file_control="/sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq"
-cpu5_max_freq_file_control="/sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq"
-cpu6_max_freq_file_control="/sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq"
-cpu7_max_freq_file_control="/sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq"
-#控制cpu最小频率路径
-cpu0_min_freq_file_control="/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq"
-cpu1_min_freq_file_control="/sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq"
-cpu2_min_freq_file_control="/sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq"
-cpu3_min_freq_file_control="/sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq"
-cpu4_min_freq_file_control="/sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq"
-cpu5_min_freq_file_control="/sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq"
-cpu6_min_freq_file_control="/sys/devices/system/cpu/cpu6/cpufreq/scaling_min_freq"
-cpu7_min_freq_file_control="/sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq"
-#cpu控制频率
 #温控设置
 if [ -e '/sys/module/msm_thermal/core_control/enabled' ];then
     if [ ! `cat /sys/module/msm_thermal/core_control/enabled` -eq 0 ];then
@@ -58,26 +28,16 @@ if [ -e '/sys/module/msm_thermal/parameters/enabled' ];then
     fi
 fi
 #最小频率
-chmod 666 /sys/module/msm_performance/parameters/cpu_min_freq
-echo 0 > /sys/module/msm_performance/parameters/cpu_min_freq
-chmod 444 /sys/module/msm_performance/parameters/cpu_min_freq
+
 #默认参数
 ##############################################################################################################################
 ##############################################################################################################################
 ##############################################################################################################################
 ##############################################################################################################################
 #字体颜色
-#周围
-if [ ! -e "${tc_path}Set_up/colour/Font/around" ];then
-    echo 33 > ${tc_path}Set_up/colour/Font/around
-fi
 #字体
-if [ ! -e "${tc_path}Set_up/colour/Font/Font" ];then
-    echo 32 > ${tc_path}Set_up/colour/Font/Font
-fi
-#选项
-if [ ! -e "${tc_path}Set_up/colour/Font/Options" ];then
-    echo 32 > ${tc_path}Set_up/colour/Font/Options
+if [ ! -e "${tc_path}Set_up/Font/Font" ];then
+    echo 32 > ${tc_path}Set_up/Font/Font
 fi
 ##############################################################################################################################
 ##############################################################################################################################
@@ -175,7 +135,7 @@ if [ ! -e "${tc_path}parameter/CTC/Maximum_current" -o ! -e "${tc_path}parameter
 fi
 #调节充电电流
 if [ ! -e "${tc_path}parameter/CTC/Reduce_current_size" ];then
-    echo $(((`cat ${tc_path}parameter/CTC/Maximum_current`-`cat ${tc_path}parameter/CTC/Minimum_current`)/30))|cut -d. -f1 > ${tc_path}parameter/CTC/Reduce_current_size
+    echo 100 > ${tc_path}parameter/CTC/Reduce_current_size
 fi
 #保护
 if [ ! -e "${tc_path}parameter/CTC/protection" ];then

@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 #未去除温控日志脚本
 
     #时间
@@ -24,7 +22,7 @@
         Z='星期三'
     elif [ `date +%u` -eq 4 ]; then
         Z='星期四'
-   elif [ `date +%u` -eq 5 ]; then
+    elif [ `date +%u` -eq 5 ]; then
         Z='星期五'
     elif [ `date +%u` -eq 6 ]; then
         Z='星期六'

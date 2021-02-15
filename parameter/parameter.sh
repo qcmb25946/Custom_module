@@ -1,27 +1,10 @@
+#参数日志
+
 #参数或日志路径
 path=/data/adb/modules/Custom_temperature_control/parameter
 tc_path=/storage/emulated/TC/
-#周围
-around=`cat $tc_path/Set_up/colour/Font/around`
 #字体
-Font=`cat $tc_path/Set_up/colour/Font/Font`
-#选项
-Option=`cat $tc_path/Set_up/colour/Font/Options`
-if [ `date +%u` -eq 1 ]; then
-    Z='星期一'
-elif [ `date +%u` -eq 2 ]; then
-    Z='星期二'
-elif [ `date +%u` -eq 3 ]; then
-    Z='星期三'
-elif [ `date +%u` -eq 4 ]; then
-    Z='星期四'
-elif [ `date +%u` -eq 5 ]; then
-    Z='星期五'
-elif [ `date +%u` -eq 6 ]; then
-    Z='星期六'
-elif [ `date +%u` -eq 7 ]; then
-    Z='星期日'
-fi
+Font=`cat $tc_path/Set_up/Font/Font`
 #减小满血温度阈值
 Open_threshold=`cat /storage/emulated/TC/parameter/PTC/Open_threshold`
 Limit_threshold=`cat /storage/emulated/TC/parameter/PTC/Limit_threshold`
@@ -33,7 +16,7 @@ big_cpu_Frequency_reduction=`cat ${tc_path}parameter/PTC/big_cpu_Frequency_reduc
 super_cpu_Frequency_reduction=`cat ${tc_path}parameter/PTC/super_cpu_Frequency_reduction`
 #gpu降频档位
 gpu_Frequency_reduction=`cat ${tc_path}parameter/PTC/gpu_Frequency_reduction`
-#充电减小满血温度阈值
+#充电减小增加温度阈值
 Increase_current_threshold=`cat /storage/emulated/TC/parameter/CTC/Increase_current_threshold`
 Lower_current_threshold=`cat /storage/emulated/TC/parameter/CTC/Lower_current_threshold`
 #每次减少电流阈值
@@ -42,13 +25,7 @@ Reduce_current_size=/storage/emulated/TC/parameter/CTC/Reduce_current_size
 Minimum_current=/storage/emulated/TC/parameter/CTC/Minimum_current
 Maximum_current=/storage/emulated/TC/parameter/CTC/Maximum_current
 #控制cpu最大频率路径
-cpu0_max_freq_file_control="/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"
-cpu1_max_freq_file_control="/sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq"
-cpu2_max_freq_file_control="/sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq"
 cpu3_max_freq_file_control="/sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq"
-cpu4_max_freq_file_control="/sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq"
-cpu5_max_freq_file_control="/sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq"
-cpu6_max_freq_file_control="/sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq"
 cpu7_max_freq_file_control="/sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq"
 #识别处理器
 Identify=`getprop ro.board.platform`
@@ -62,273 +39,185 @@ Current_mode=`cat /storage/emulated/TC/parameter/PTC/Current_mode`
         clear
         if [ $Current_mode = A ]; then
             if [ $Identify = lito -o $Identify = msmnile -o $Identify = kona ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m均衡模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core`  \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Big_core_daily_frequency`        \t\t\e[${around}m*
-*\t\e[${Font}m超大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/super_core_daily_frequency`   \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m熄屏模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Small_core_Power_saving`       \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/big_core_Power_saving`         \t\t\e[${around}m*
-*\t\e[${Font}m超大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/super_core_Power_saving`      \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/gpu_Power_saving`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$big_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m超大核心降频档位=$super_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
+                echo "
+\t\t\e[${Font}m欢迎 使用自定义 温控
+\t\t`date +"%Y-%m-%d  %H:%M:%S"`
+\t\t当前处理器参数
+\t\t当前设置模式：$mode
+
+\t\t均衡模式                       
+\t\tcpu_small_max\t`cat /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core`
+\t\tcpu_major_max\t`cat /storage/emulated/TC/parameter/PTC/Big_core_daily_frequency`
+\t\tcpu_super_max\t`cat /storage/emulated/TC/parameter/PTC/super_core_daily_frequency`
+\t\tgpu_max\t\t`cat /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency`
+
+\t\t熄屏模式                       
+\t\tcpu_small_max\t`cat /storage/emulated/TC/parameter/PTC/Small_core_Power_saving`
+\t\tcpu_major_max\t`cat /storage/emulated/TC/parameter/PTC/big_core_Power_saving`
+\t\tcpu_super_max\t`cat /storage/emulated/TC/parameter/PTC/super_core_Power_saving`
+\t\tgpu_max\t\t`cat /storage/emulated/TC/parameter/PTC/gpu_Power_saving`
+
+\t\tSOC温度参数
+\t\tdrop\t\t`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\tSOC降频档位
+\t\tcpu_small_gear\t$small_cpu_Frequency_reduction
+\t\tcpu_major_gear\t$big_cpu_Frequency_reduction
+\t\tcpu_super_gear\t$super_cpu_Frequency_reduction
+\t\tgpu_gear\t$gpu_Frequency_reduction
+
+\t\t充电温度参数
+\t\tdrop\t\t`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\t充电电流参数
+\t\tcurrent_max\t`cat $Maximum_current`ma
+\t\tCurrent_min\t`cat $Minimum_current`ma
+\t\tCurrent_adjust\t`cat $Reduce_current_size`ma
+
+\t\t8）返回设置参数
+\t\t9）返回主菜单
+\t\t0）退出
+"
+                echo -ne "\t\t请选择："
                 read Options
                 case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
+                9)sh $path/A_menu.sh;;
+                8)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
+                0)exit;;
                 *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
+                sleep 0.1
                 sh $path/parameter.sh;;
                 esac
-            elif [ -e $cpu7_max_freq_file_control ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m均衡模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core`  \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/super_core_daily_frequency`   \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m熄屏模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Small_core_Power_saving`       \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/super_core_Power_saving`       \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/gpu_Power_saving`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$super_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
+            else
+                echo "
+\t\t\e[${Font}m欢迎 使用自定义 温控
+\t\t`date +"%Y-%m-%d  %H:%M:%S"`
+\t\t当前处理器参数
+\t\t当前设置模式：$mode
+
+\t\t均衡模式                       
+\t\tcpu_small_max\t`cat /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core`
+\t\tcpu_major_max\t`cat /storage/emulated/TC/parameter/PTC/super_core_daily_frequency`
+\t\tgpu_max\t\t`cat /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency`
+
+\t\t熄屏模式                       
+\t\tcpu_small_max\t`cat /storage/emulated/TC/parameter/PTC/Small_core_Power_saving`
+\t\tcpu_major_max\t`cat /storage/emulated/TC/parameter/PTC/super_core_Power_saving`
+\t\tgpu_max\t\t`cat /storage/emulated/TC/parameter/PTC/gpu_Power_saving`
+
+\t\tSOC温度参数
+\t\tdrop\t\t`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\tSOC降频档位
+\t\tcpu_small_gear\t$small_cpu_Frequency_reduction
+\t\tcpu_major_gear\t$super_cpu_Frequency_reduction
+\t\tgpu_gear\t$gpu_Frequency_reduction
+
+\t\t充电温度参数
+\t\tdrop\t\t`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\t充电电流参数
+\t\tcurrent_max\t`cat $Maximum_current`ma
+\t\tCurrent_min\t`cat $Minimum_current`ma
+\t\tCurrent_adjust\t`cat $Reduce_current_size`ma
+
+\t\t8）返回设置参数
+\t\t9）返回主菜单
+\t\t0）退出
+"
+                echo -ne "\t\t请选择："
                 read Options
                 case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
+                9)sh $path/A_menu.sh;;
+                8)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
+                0)exit;;
                 *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
-                sh $path/parameter.sh;;
-                esac
-            elif [ -e $cpu3_max_freq_file_control ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m均衡模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Daily_frequency_of_small_core`  \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Big_core_daily_frequency`        \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/Video_card_daily_frequency`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m熄屏模式                       \t\t\e[${around}m*
-*\t\e[${Font}m小核心最大频率=`cat /storage/emulated/TC/parameter/PTC/Small_core_Power_saving`       \t\t\e[${around}m*
-*\t\e[${Font}m大核心最大频率=`cat /storage/emulated/TC/parameter/PTC/big_core_Power_saving`         \t\t\e[${around}m*
-*\t\e[${Font}mGPU最大频率=`cat /storage/emulated/TC/parameter/PTC/gpu_Power_saving`      \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$big_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
-                read Options
-                case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
-                *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
+                sleep 0.1
                 sh $path/parameter.sh;;
                 esac
             fi
         else
             if [ $Identify = lito -o $Identify = msmnile -o $Identify = kona ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$big_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m超大核心降频档位=$super_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
+                echo "
+\t\t\e[${Font}m欢迎 使用自定义 温控
+\t\t`date +"%Y-%m-%d  %H:%M:%S"`
+\t\t当前处理器参数
+\t\t当前设置模式：$mode
+
+\t\tSOC温度参数
+\t\tdrop\t\t`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\tSOC降频档位
+\t\tcpu_small_gear\t$small_cpu_Frequency_reduction
+\t\tcpu_major_gear\t$big_cpu_Frequency_reduction
+\t\tcpu_super_gear\t$super_cpu_Frequency_reduction
+\t\tgpu_gear\t$gpu_Frequency_reduction
+
+\t\t充电温度参数
+\t\tdrop\t\t`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\t充电电流参数
+\t\tcurrent_max\t`cat $Maximum_current`ma
+\t\tCurrent_min\t`cat $Minimum_current`ma
+\t\tCurrent_adjust\t`cat $Reduce_current_size`ma
+
+\t\t8）返回设置参数
+\t\t9）返回主菜单
+\t\t0）退出
+"
+                echo -ne "\t\t请选择："
                 read Options
                 case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
+                9)sh $path/A_menu.sh;;
+                8)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
+                0)exit;;
                 *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
+                sleep 0.1
                 sh $path/parameter.sh;;
                 esac
-            elif [ -e $cpu7_max_freq_file_control ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$super_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
+            else
+                echo "
+\t\t\e[${Font}m欢迎 使用自定义 温控
+\t\t`date +"%Y-%m-%d  %H:%M:%S"`
+\t\t当前处理器参数
+\t\t当前设置模式：$mode
+
+\t\tSOC温度参数
+\t\tdrop\t\t`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\tSOC降频档位
+\t\tcpu_small_gear\t$small_cpu_Frequency_reduction
+\t\tcpu_major_gear\t$super_cpu_Frequency_reduction
+\t\tgpu_gear\t$gpu_Frequency_reduction
+
+\t\t充电温度参数
+\t\tdrop\t\t`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃
+\t\tfull\t\t`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃
+
+\t\t充电电流参数
+\t\tcurrent_max\t`cat $Maximum_current`ma
+\t\tCurrent_min\t`cat $Minimum_current`ma
+\t\tCurrent_adjust\t`cat $Reduce_current_size`ma
+
+\t\t8）返回设置参数
+\t\t9）返回主菜单
+\t\t0）退出
+"
+                echo -ne "\t\t请选择："
                 read Options
                 case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
+                9)sh $path/A_menu.sh;;
+                8)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
+                0)exit;;
                 *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
-                sh $path/parameter.sh;;
-                esac
-            elif [ -e $cpu3_max_freq_file_control ]; then
-                echo "\e[${around}m*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}m欢迎使用全机型自定义温控2.0\t\t\e[${around}m*
-*\t\e[${Font}m`date +"%Y-%m-%d %H:%M:%S $Z"`\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前处理器参数               \t\t\e[${around}m*
-*\t\e[${Font}m当前设置模式：$mode        \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m处理器降频温度=`echo "$Limit_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m处理器满血温度=`echo "$Open_threshold 10"|awk '{print ($1/$2)}'`℃        \t\t\e[${around}m*
-*\t\e[${Font}m小核心降频档位=$small_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}m大核心降频档位=$big_cpu_Frequency_reduction           \t\t\e[${around}m*
-*\t\e[${Font}mGPU降频档位=$gpu_Frequency_reduction                 \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*\t\e[${Font}m当前充电参数               \t\t\e[${around}m*
-*\t\e[${Font}m降低充电速度温度=`echo "$Increase_current_threshold 10"|awk '{print ($1/$2)}'`℃      \t\t\e[${around}m*
-*\t\e[${Font}m满血充电速度温度=`echo "$Lower_current_threshold 10"|awk '{print ($1/$2)}'`℃       \t\t\e[${around}m*
-*\t\e[${Font}m最大充电电流档位=`cat $Maximum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m最小充电电流档位=`cat $Minimum_current`毫安     \t\t\e[${around}m*
-*\t\e[${Font}m阶梯减少充电阈值=`cat $Reduce_current_size`毫安    \t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************
-*\t\t\t\t\t\t*
-*\t\e[${Font}mm.返回主菜单    \t\t\t\e[${around}m*
-*\t\e[${Font}mr.返回设置参数  \t\t\t\e[${around}m*
-*\t\e[${Font}mq.退出     \t\t\t\t\e[${around}m*
-*\t\t\t\t\t\t*
-*************************************************"
-                echo -ne "\e[${Option}m请选择："
-                read Options
-                case $Options in
-                m)sh $path/A_menu.sh;;
-                r)sh $path/B_menu.sh B_menu_Parameter_adjustment;;
-                q)exit;;
-                *)echo -e "\t\e[31m输入有误重新输入"
-                sleep 1
+                sleep 0.1
                 sh $path/parameter.sh;;
                 esac
             fi

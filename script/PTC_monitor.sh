@@ -1,6 +1,4 @@
-#!/system/bin/sh
-
-#SOC删除温控失败，改为日志
+#SOC清理温控失败，改为日志
 
 #固定最大cpu频率路径
 cpu0_max_freq_file_fixed="/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"
