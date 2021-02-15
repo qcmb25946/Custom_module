@@ -1,6 +1,7 @@
-id=Custom_temperature_control
-name=自定义温控v2.13
-version=v2020.11.27
-versionCode=8
+id=Custom_module
+name=自定义模块
+version=2020.04.01
+versionCode=1
 author=千城墨白
-description=解决小米部分手机卡一屏
+description=
+minMagisk=17000
