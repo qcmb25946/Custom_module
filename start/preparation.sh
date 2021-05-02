@@ -184,7 +184,7 @@ processor="/data/adb/modules/Custom_module/script/processor.sh"
 sh $processor > /dev/null 2>&1 &
 #游戏调整
 game="/data/adb/modules/Custom_module/script/game.sh"
-sh $game > /dev/null 2>&1 &
+#sh $game > /dev/null 2>&1 &
 #系统设置
 system="/data/adb/modules/Custom_module/script/system.sh"
 sh $system > /dev/null 2>&1 &

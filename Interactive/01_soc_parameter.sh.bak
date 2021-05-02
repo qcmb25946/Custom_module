@@ -1,0 +1,508 @@
+#!/system/bin/sh
+
+
+#soc参数菜单
+
+#菜单路径
+Interaction_path="/data/adb/modules/Custom_module/Interactive/"
+#当前是否满血
+soc_full="/cache/ZDY/processor/soc_full"
+#soc满血阈值gpu
+soc_full_temp="/cache/ZDY/processor/soc_full_temp"
+#soc满血阈值电池
+soc_full_battery_temp="/cache/ZDY/processor/soc_full_battery_temp"
+#cpu降频阈值gpu
+cpu_down_temp="/cache/ZDY/processor/cpu_down_temp"
+#cpu降频阈值电池
+cpu_down_battery_temp="/cache/ZDY/processor/cpu_down_battery_temp"
+#gpu降频阈值gpu
+gpu_down_temp="/cache/ZDY/processor/gpu_down_temp"
+#gpu降频阈值电池
+gpu_down_battery_temp="/cache/ZDY/processor/gpu_down_battery_temp"
+#soc设置
+soc_menu(){
+#文本编号
+serial_number="0101"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+case $transfer in
+    #温控
+    1)
+        Temperature_controll_menu
+    ;;
+    #调度
+    2)
+        drop_menu
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        soc_menu
+    ;;
+esac
+}
+#温控
+Temperature_controll_menu(){
+#满血判断
+if [ -f "$soc_full" ];then
+    status="满血"
+else
+    status="降频"
+fi
+#设置参数状态
+parameter="当前状态：$status SOC满血阈值：$(echo $(echo "$(cat $soc_full_temp) 10"|awk '{print $1 / $2}'))℃(gpu)--$(echo $(echo "$(cat $soc_full_battery_temp) 10"|awk '{print $1 / $2}'))℃(电池) CPU降频阈值：$(echo $(echo "$(cat $cpu_down_temp) 10"|awk '{print $1 / $2}'))℃(gpu)--$(echo $(echo "$(cat $cpu_down_battery_temp) 10"|awk '{print $1 / $2}'))℃(电池) GPU降频阈值：$(echo $(echo "$(cat $gpu_down_temp) 10"|awk '{print $1 / $2}'))℃(gpu)--$(echo $(echo "$(cat $gpu_down_battery_temp) 10"|awk '{print $1 / $2}'))℃(电池)"
+#文本编号
+serial_number="0102"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+case $transfer in
+    #SOC满血
+    1)
+        soc_full_menu
+    ;;
+    #CPU降频
+    2)
+        cpu_drop_menu
+    ;;
+    #GPU降频
+    3)
+        gpu_drop_menu
+    ;;
+    #返回上一级
+    c)
+        soc_menu
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        Temperature_controll_menu
+    ;;
+esac
+}
+#满血
+soc_full_menu(){
+parameter="SOC满血阈值：$(echo $(echo "$(cat $soc_full_temp) 10"|awk '{print $1 / $2}'))℃(gpu)--$(echo $(echo "$(cat $soc_full_battery_temp) 10"|awk '{print $1 / $2}'))℃(电池)"
+#文本编号
+serial_number="0103"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer_1
+case $transfer_1 in
+    #gpu满血阈值
+    1)
+        gpu_full_temp
+    ;;
+    #电池满血阈值
+    2)
+        battery_full_temp
+    ;;
+    #返回上一级
+    c)
+        soc_menu
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        soc_full_menu
+    ;;
+esac
+}
+#满血gpu阈值
+gpu_full_temp(){
+#gpu最低温度
+gpu_lowest_temp=51
+#gpu上限温度
+gpu_Upper_temp="$(($(cat $cpu_down_temp) / 10))"
+#gpu_低阈值
+Low_threshold=$gpu_lowest_temp
+#排列
+frequency=0
+#查看条件
+condition="$(($gpu_Upper_temp - $gpu_lowest_temp))"
+if [ $condition -lt 10 ];then
+    #低值
+    Low_value=$gpu_lowest_temp
+    #高值
+    high_value=$gpu_Upper_temp
+    gpu_full_temp_1
+fi
+#初始化
+sum1=""
+while true
+    do
+        let frequency++
+        #温差
+        temp_diff=$((gpu_Upper_temp-$Low_threshold))
+        #参数
+        if [ $temp_diff -gt 10 ];then
+            plus_9="$((($Low_threshold / 10 + 1) * 10))"
+            if [ -z "$sum1" ];then
+                sum1="$Low_threshold~$plus_9"
+            else
+                sum1="$sum1\n$Low_threshold~$plus_9"
+            fi
+            let Low_threshold+=10
+        else
+            if [ -z "$sum1" ];then
+                sum1="$Low_threshold~$gpu_Upper_temp"
+            else
+                sum1="$sum1\n$Low_threshold~$gpu_Upper_temp"
+            fi
+            break
+        fi
+    done
+#参数
+parameter="SOC满血阈值：$(echo $(($(cat $soc_full_temp) / 10))℃ n $(echo $(echo "$sum1"|awk '{print FNR "）" $0}')))"
+#文本编号
+serial_number="0104"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+case $transfer in
+    #温控
+    [1-$frequency])
+        #低值
+        Low_value=$(($gpu_lowest_temp + ($transfer - 1) * 10))
+        #预备高值
+        Prepare_high_value=$(($Low_value + 9))
+        if [ $Prepare_high_value -gt $gpu_Upper_temp ];then
+            high_value=$gpu_Upper_temp
+        else
+            high_value=$Prepare_high_value
+        fi
+        gpu_full_temp_1
+    ;;
+    #满血gpu温度
+    s)
+        battery_full_temp
+    ;;
+    #返回上一级
+    c)
+        soc_full_menu
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        gpu_full_temp
+    ;;
+esac
+}
+#满血gpu温度参数写入
+gpu_full_temp_1(){
+#排列数
+number=0
+#初始值
+Threshold_1=""
+for C in $(seq $Low_value 1 $high_value)
+    do
+        let number++
+        if [ -z "$Threshold_1" ];then
+            Threshold_1=$C
+        else
+            Threshold_1="$(echo "${Threshold_1}\n$C")"
+        fi
+    done
+#输出参数
+parameter="$(echo $(echo "$Threshold_1"|awk '{print FNR "）" $0}'))"
+#文本代号
+serial_number="0105"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+#写入满血gpu温度
+for D in $(seq 1 1 $number)
+    do
+        if [ "$transfer" = "$D" ];then
+            result="$((($Low_value + $D - 1)* 10))"
+            echo $result > $soc_full_temp
+            echo -e "\e[31mOK，已经更新数据"
+            sleep 1
+            sh $Interaction_path/01_soc_parameter.sh Temperature_controll_menu
+        fi
+    done
+
+case $transfer in
+    #满血gpu温度
+    s)
+        battery_full_temp
+    ;;
+    #重新选择范围
+    c)
+        gpu_full_temp
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        gpu_full_temp_1
+    ;;
+esac
+
+}
+
+#电池满血阈值
+battery_full_temp(){
+#电池低值
+battery_lowest_value=38
+#电池上线值
+battery_highest_value="$(($(cat ${cpu_down_battery_temp}) / 10))"
+
+#排列
+arrangement=0
+#初始值
+Select_value=""
+#选择阈值
+for E in $(seq $battery_lowest_value 1 $battery_highest_value)
+    do
+        let arrangement++
+        if [ -z "$Select_value" ];then
+            Select_value=$E
+        else
+            Select_value="$Select_value\n$E"
+            
+        fi
+    done
+
+#输出参数
+parameter="SOC满血阈值：$(($(cat $soc_full_battery_temp) / 10)) $(echo $Select_value|awk '{print FNR "）" $0}')"
+#文本代号
+serial_number="0106"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+for F in $(seq $arrangement)
+    do
+        if [ "$transfer" = "$F" ];then
+            echo $((($battery_lowest_value + $transfer - 1) * 10)) > $soc_full_battery_temp
+            echo -e "\e[31mOK，已经更新数据"
+            sleep 1
+            sh $Interaction_path/01_soc_parameter.sh Temperature_controll_menu
+        fi
+    done
+case $transfer in
+    #满血gpu温度
+    s)
+        gpu_full_temp
+    ;;
+    #满血温度
+    c)
+        soc_full_menu
+    ;;
+    #返回主菜单
+    r)
+    . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #超范围参数
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        battery_full_temp
+    ;;
+esac
+}
+#cpu降频
+cpu_drop_menu(){
+echo 1
+}
+#cpu降频gpu温度
+gpu_drop_temp(){
+#最低值
+battery_lowest_value="$(($(cat $soc_full_temp) / 10))"
+#最高值
+battery_highest_value=100
+#范围值最初值
+typesetting=""
+#排列数
+number=0
+#范围初始低值
+Low_value=$battery_lowest_value
+#排版范围值
+while true
+    do
+        #范围高值
+        High_value=$((($Low_value / 10 + 1) * 10))
+        #高于最高值打断
+        if [ $High_value -gt $battery_highest_value ];then
+            typesetting=$(echo "$typesetting"|awk '{print FNR "）" $0}')
+            break
+        fi
+        let number++
+        #范围
+        Range_value=$(echo "$Low_value-$High_value")
+        #排版
+        if [ -z "$typesetting" ];then
+            typesetting=$Range_value
+        else
+            typesetting="$typesetting\n$Range_value"
+        fi
+        #范围低值
+        Low_value=$(($High_value + 1))
+    done
+parameter=$(echo "SOC满血阈值：$(($(cat $cpu_down_temp) / 10))℃ n $typesetting")
+#文本代号
+serial_number="0108"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+case $transfer in
+    #温控
+    [1-$number])
+        #高值
+        high_value=$((($battery_lowest_value / 10 + $transfer) * 10))
+        #低值
+        if [ $transfer = 1 ];then
+            Low_value=$battery_lowest_value
+        else
+            Low_value=$(($high_value - 9))
+        fi
+        gpu_drop_temp_1
+    ;;
+    #满血gpu温度
+    s)
+        battery_full_temp
+    ;;
+    #返回上一级
+    c)
+        cpu_drop_menu
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #错误输入
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        gpu_drop_temp
+    ;;
+esac
+}
+#cpu降频gpu温度写入
+gpu_drop_temp_1(){
+#排列数
+number=0
+#初始值
+Threshold_1=""
+for C in $(seq $Low_value 1 $high_value)
+    do
+        let number++
+        if [ -z "$Threshold_1" ];then
+            Threshold_1=$C
+        else
+            Threshold_1="$(echo "${Threshold_1}\n$C")"
+        fi
+    done
+#输出参数
+parameter="$(echo $(echo "$Threshold_1"|awk '{print FNR "）" $0}'))"
+#文本代号
+serial_number="0109"
+#输出菜单
+. "$Interaction_path/10_Output_menu.sh"
+echo -n "请选择："
+read transfer
+#写入cpu降频gpu温度
+for D in $(seq 1 1 $number)
+    do
+        if [ "$transfer" = "$D" ];then
+            result="$((($Low_value + $D - 1)* 10))"
+            echo $result > $gpu_down_temp
+            echo -e "\e[31mOK，已经更新数据"
+            sleep 1
+            sh $Interaction_path/01_soc_parameter.sh Temperature_controll_menu
+        fi
+    done
+
+case $transfer in
+    #cpu降频gpu温度
+    s)
+        battery_full_temp
+    ;;
+    #重新选择范围
+    c)
+        gpu_drop_temp
+    ;;
+    #返回主菜单
+    r)
+        . "$Interaction_path/00_main_menu.sh" main_menu
+    ;;
+    #退出
+    e)
+        exit
+    ;;
+    #超范围参数
+    *)
+        echo -e "\e[31m超范围输入重新输入"
+        sleep 1
+        gpu_drop_temp_1
+    ;;
+esac
+}
+#gpu降频
+gpu_drop_menu(){
+
+}
+#soc菜单
+$1
+gpu_drop_temp
+#gpu_full_temp

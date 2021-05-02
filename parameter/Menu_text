@@ -1,0 +1,9 @@
+0001=欢迎使用自定义模块 date n 1）SOC_参数 2）充电参数 3）快速寻找 4）游戏调整 5）系统调整 6）估算电池 7）双扬声器 8）查看日志 n e）退出
+0101=欢迎使用自定义模块 date n SOC参数 n 1）温控 2）调度 n r）返回主菜单 e）退出
+0102=欢迎使用自定义模块 date n 温控 n parameter n 1）SOC满血阈值 2）CPU降频阈值 3）GPU降频阈值 n c）返回上一级 r）返回主菜单 e）退出
+0103=欢迎使用自定义模块 date n parameter n 1）GPU_阈值 2）电池阈值 n c）返回上一级 r）返回主菜单 e）退出
+0104=欢迎使用自定义模块 date n SOC满血阈值(GPU) parameter n s）满血电池阈值 c）返回上一级 r）返回主菜单 e）退出
+0105=欢迎使用自定义模块 date n 请选择 n parameter n c）重新选择范围 r）返回主菜单 e）退出
+0106=欢迎使用自定义模块 date n SOC满血阈值(电池) n parameter n s）满血GPU阈值 c）返回上一级 r）返回主菜单 e）退出
+0108=欢迎使用自定义模块 date n SOC满血降频(GPU) parameter n s）降频电池阈值 c）返回上一级 r）返回主菜单 e）退出
+0109=欢迎使用自定义模块 date n 请选择 n parameter n c）重新选择范围 r）返回主菜单 e）退出

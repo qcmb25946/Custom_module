@@ -1,0 +1,50 @@
+#!/system/bin/sh
+
+
+#输出菜单
+
+#文本路径
+menu="/data/adb/modules/Custom_module/parameter/Menu_text"
+
+#需要的文本
+Need_text="$(cat $menu|grep "${serial_number}="|cut -d"=" -f2)"
+
+
+#文本字段
+Text_word_count="$(echo $Need_text|wc -w)"
+#主题颜色
+echo -e "\e[032m"
+clear
+#输出
+for A in $(seq $Text_word_count)
+    do
+        #字段
+        word="$(echo "$Need_text"|cut -d" " -f$A)"
+        #换行
+        if [ "$word" = "n" ];then
+            echo
+        #时间
+        elif [ "$word" = "date" ];then
+            echo "$(date "+%F %T")"
+        #输出参数
+        elif [ "$word" = "parameter" ];then
+            #参数段数
+            Field_number="$(echo "$parameter"|wc -w)"
+            #输出参数
+            for B in $(seq $Field_number)
+                do
+                    #字段
+                    word=$(echo $parameter|cut -d" " -f$B)
+                    if [ "$word" = "n" ];then
+                        echo
+                    else
+                        echo $word
+                    fi
+                    sleep 0.1
+                done
+        #字段
+        else
+            echo "$word"
+        fi
+        sleep 0.1
+    done

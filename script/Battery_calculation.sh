@@ -2,6 +2,7 @@
 
 
 #估算电池容量
+
 while true
 do
 date
